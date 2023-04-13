@@ -1,16 +1,16 @@
 import express, { Request, Response } from "express";
 import { db } from "../database/knex";
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUserTasks = async (req: Request, res: Response) => {
   try {
-    const result = await db("users");
+    const result = await db("users_tasks").select("*");
 
     if (!result.length) {
       res.send(400);
-      throw new Error("Ainda não há usuários gravados.");
+      throw new Error("Ainda não há tasks gravadas.");
     }
 
-    res.status(200).send({ message: "Pong!", result });
+    res.status(200).send(result);
   } catch (error) {
     console.log(error);
 

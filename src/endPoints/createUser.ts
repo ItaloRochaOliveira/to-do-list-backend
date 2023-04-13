@@ -52,15 +52,21 @@ export const createUser = async (req: Request, res: Response) => {
       }
     }
 
-    const [user] = await db("users")
-      .where("id", id)
-      .orWhere("name", name)
-      .orWhere("email", email);
+    const [user] = await db("users").where("id", id).orWhere("email", email);
 
     if (user) {
       res.status(400);
       throw new Error("Usuário já existe");
     }
+
+    const newUser = {
+      id,
+      name,
+      email,
+      password,
+    };
+
+    await db("users").insert(newUser);
 
     res.status(200).send({ message: "Usuário criado com sucesso!" });
   } catch (error) {
